@@ -30,7 +30,7 @@ namespace SqlBrokerToAzureAdapter
                     await consumerInstallation.InstallAsync(CancellationToken.None);
                     break;
                 default:
-                    throw new NotSupportedException("please use parameter 'run' oder 'setup'");
+                    throw new NotSupportedException("please use parameter 'run' oder 'install'");
             }
         }
 
