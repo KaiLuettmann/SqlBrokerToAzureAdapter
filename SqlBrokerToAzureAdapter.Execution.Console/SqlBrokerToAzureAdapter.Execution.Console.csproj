@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RootNamespace>SqlBrokerToAzureAdapter</RootNamespace>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SqlBrokerToAzureAdapter.Contracts\SqlBrokerToAzureAdapter.Contracts.csproj" />
+    <ProjectReference Include="..\SqlBrokerToAzureAdapter.Setup\SqlBrokerToAzureAdapter.Setup.csproj" />
+    <ProjectReference Include="..\SqlBrokerToAzureAdapter.Transformations\SqlBrokerToAzureAdapter.Transformations.csproj" />
+    <ProjectReference Include="..\SqlBrokerToAzureAdapter\SqlBrokerToAzureAdapter.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="./appsettings.Development.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

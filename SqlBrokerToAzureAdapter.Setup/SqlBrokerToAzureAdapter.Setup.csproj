@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.12" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.12" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.12" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="3.1.12" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.12" />
+      <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Consumers\SqlBrokerQueues\SqlTemplates\SetupQueueTemplate.sql">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Consumers\SqlBrokerQueues\SqlTemplates\SetupTableServicesTemplate.sql">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Consumers\SqlBrokerQueues\SqlTemplates\SetupTableDeletedTriggerTemplate.sql">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Consumers\SqlBrokerQueues\SqlTemplates\SetupTableInsertedTriggerTemplate.sql">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Consumers\SqlBrokerQueues\SqlTemplates\SetupTableUpdatedTriggerTemplate.sql">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+</Project>

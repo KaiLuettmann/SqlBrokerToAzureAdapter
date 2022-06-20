@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <IsPackable>false</IsPackable>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <RootNamespace>SqlBrokerToAzureAdapter.IntegrationTests</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FluentAssertions" Version="5.10.3" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
+      <PackageReference Include="xunit" Version="2.4.1" />
+      <PackageReference Include="xunit.extensibility.core" Version="2.4.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SqlBrokerToAzureAdapter.Execution.Console\SqlBrokerToAzureAdapter.Execution.Console.csproj" />
+      <ProjectReference Include="..\SqlBrokerToAzureAdapter.Testkit\SqlBrokerToAzureAdapter.Testkit.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="..\SqlBrokerToAzureAdapter.Execution.Console\appsettings.Development.json">
+          <Link>appsettings.Development.json</Link>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Users\BrokerMessages\User.Deleted.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Users\BrokerMessages\User.Inserted.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Users\BrokerMessages\User.Updated.Phone.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Users\BrokerMessages\User.Updated.Name.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Users\Events\UserContactInfoChangedEvent.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Users\Events\UserAddedEvent.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Users\Events\UserDeletedEvent.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Users\Events\UserNameChangedEvent.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+</Project>

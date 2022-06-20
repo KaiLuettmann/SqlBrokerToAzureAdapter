@@ -1,0 +1,24 @@
+{
+  "Setup": {
+    "SqlBrokerQueueConsumer": {
+      "Connection": {
+        "ConnectionString": "Data Source=localhost,19876;Initial Catalog=ServiceBrokerTest;User ID=sa;Password=Password@12345"
+      },
+      "Generation": {
+        "DatabaseName": "ServiceBrokerTest",
+        "SchemaName": "dbo",
+        "ReceiverQueueName": "ChangesReceiverQueue",
+        "SenderQueueName": "ChangesSenderQueue",
+        "TableSubscriptions": [
+          {
+            "TableName": "User",
+            "PrimaryKeyColumnName": "ID",
+            "InsertBrokerMessageTypeName": "User.Inserted",
+            "UpdateBrokerMessageTypeName": "User.Updated",
+            "DeleteBrokerMessageTypeName": "User.Deleted"
+          }
+        ]
+      }
+    }
+  }
+}

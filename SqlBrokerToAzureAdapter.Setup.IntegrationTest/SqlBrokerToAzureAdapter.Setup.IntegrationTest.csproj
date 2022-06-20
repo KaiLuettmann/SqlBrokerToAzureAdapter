@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <IsPackable>false</IsPackable>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AutoFixture" Version="4.14.0" />
+        <PackageReference Include="Divergic.Logging.Xunit" Version="3.6.0" />
+        <PackageReference Include="DockerComposeFixture" Version="1.0.12" />
+        <PackageReference Include="FluentAssertions" Version="5.10.3" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+        <PackageReference Include="Moq" Version="4.14.5" />
+        <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+        <PackageReference Include="coverlet.collector" Version="1.2.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\SqlBrokerToAzureAdapter.Setup\SqlBrokerToAzureAdapter.Setup.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Consumers\SqlBrokerQueues\SqlBrokerQueueInstallationTests.settings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Consumers\SqlBrokerQueues\Docker\docker-compose.yml">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Consumers\SqlBrokerQueues\Docker\entrypoint.sh">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Consumers\SqlBrokerQueues\Docker\mssql-2019.Dockerfile">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Consumers\SqlBrokerQueues\Docker\setup-database.sh">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Consumers\SqlBrokerQueues\Docker\setup.sql">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="xunit.runner.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+</Project>
