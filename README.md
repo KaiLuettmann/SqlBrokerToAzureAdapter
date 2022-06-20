@@ -57,7 +57,7 @@ dbug: SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues.MessageBodyDeserializer[
 info: SqlBrokerToAzureAdapter.Adapter.SqlBrokerToAzureAdapter[0]
       Insert values transformed to Azure-Event
 info: SqlBrokerToAzureAdapter.Producers.AzureTopics.AzureTopicProducer[0]
-      Azure-Events published to Azure on topic 'employee-employee-added-v1'
+      Azure-Events published to Azure on topic 'sqlBroker-to-azureAdapter-example-v1'
 info: SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues.SqlBrokerMessageHandler[0]
       Handling of broker message with id '781e433e-f36b-1410-8108-008c04d07b9b' finished.
 ```
@@ -87,7 +87,7 @@ EditTransformation of type 'UserNameChangedTransformation' is responsible for de
 info: SqlBrokerToAzureAdapter.Adapter.SqlBrokerToAzureAdapter[0]
 Edited values transformed to Azure-Event
 info: SqlBrokerToAzureAdapter.Producers.AzureTopics.AzureTopicProducer[0]
-Azure-Events published to Azure on topic 'employee-employee-name-changed-v1'
+Azure-Events published to Azure on topic 'sqlBroker-to-azureAdapter-example-v1'
 dbug: SqlBrokerToAzureAdapter.Adapter.SqlBrokerToAzureAdapter[0]
 EditTransformation of type 'UserContactInfoChangedTransformation' is not responsible for detected changes.
 info: SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues.SqlBrokerMessageHandler[0]
@@ -121,7 +121,7 @@ dbug: SqlBrokerToAzureAdapter.Adapter.SqlBrokerToAzureAdapter[0]
 info: SqlBrokerToAzureAdapter.Adapter.SqlBrokerToAzureAdapter[0]
       Edited values transformed to Azure-Event
 info: SqlBrokerToAzureAdapter.Producers.AzureTopics.AzureTopicProducer[0]
-      Azure-Events published to Azure on topic 'employee-employee-contact-information-changed-v1'
+      Azure-Events published to Azure on topic 'sqlBroker-to-azureAdapter-example-v1'
 info: SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues.SqlBrokerMessageHandler[0]
       Handling of broker message with id 'a504433e-f36b-1410-870d-00405a72a7fc' finished.
 ```
@@ -146,7 +146,7 @@ dbug: SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues.MessageBodyDeserializer[
 info: SqlBrokerToAzureAdapter.Adapter.SqlBrokerToAzureAdapter[0]
       Deleted values transformed to Azure-Event
 info: SqlBrokerToAzureAdapter.Producers.AzureTopics.AzureTopicProducer[0]
-      Azure-Events published to Azure on topic 'employee-employee-removed-v1'
+      Azure-Events published to Azure on topic 'sqlBroker-to-azureAdapter-example-v1'
 info: SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues.SqlBrokerMessageHandler[0]
       Handling of broker message with id '9c1e433e-f36b-1410-8108-008c04d07b9b' finished.
 ```
