@@ -331,3 +331,6 @@ ASALocalRun/
 
 # Ignore MacOS specific files/directories
 .DS_Store
+
+# Ignore VS-Code specific files/directories
+.vscode
