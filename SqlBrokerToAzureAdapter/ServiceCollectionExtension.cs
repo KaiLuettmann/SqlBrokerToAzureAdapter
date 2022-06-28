@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using SqlBrokerToAzureAdapter.Adapter;
 using SqlBrokerToAzureAdapter.Consumers;
 using SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues;
-using SqlBrokerToAzureAdapter.Producers;
 using SqlBrokerToAzureAdapter.Producers.AzureTopics;
 using SqlBrokerToAzureAdapter.Transformations;
 

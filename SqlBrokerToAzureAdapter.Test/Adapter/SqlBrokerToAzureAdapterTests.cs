@@ -11,7 +11,7 @@ using SqlBrokerToAzureAdapter.Adapter;
 using SqlBrokerToAzureAdapter.Adapter.Exceptions;
 using SqlBrokerToAzureAdapter.MessageContracts;
 using SqlBrokerToAzureAdapter.Producers.AzureTopics;
-using SqlBrokerToAzureAdapter.Producers.AzureTopics.Models;
+using SqlBrokerToAzureAdapter.Producers.Common.Models;
 using SqlBrokerToAzureAdapter.Test.TestModelBuilders;
 using SqlBrokerToAzureAdapter.Test.TestUtilities.Moq;
 using SqlBrokerToAzureAdapter.Transformations;

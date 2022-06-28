@@ -1,6 +1,6 @@
 using System;
 
-namespace SqlBrokerToAzureAdapter.Producers.AzureTopics.Exceptions
+namespace SqlBrokerToAzureAdapter.Producers.Common.Exceptions
 {
     /// <summary>
     /// Errors caused when the entity id is invalid

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using SqlBrokerToAzureAdapter.MessageContracts;
 using SqlBrokerToAzureAdapter.Producers.AzureTopics;
-using SqlBrokerToAzureAdapter.Producers.AzureTopics.Models;
+using SqlBrokerToAzureAdapter.Producers.Common.Models;
 
 namespace SqlBrokerToAzureAdapter.Testkit.Producers
 {

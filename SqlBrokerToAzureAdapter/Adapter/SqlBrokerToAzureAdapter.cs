@@ -7,7 +7,7 @@ using SqlBrokerToAzureAdapter.Adapter.Exceptions;
 using SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues;
 using SqlBrokerToAzureAdapter.MessageContracts;
 using SqlBrokerToAzureAdapter.Producers.AzureTopics;
-using SqlBrokerToAzureAdapter.Producers.AzureTopics.Models;
+using SqlBrokerToAzureAdapter.Producers.Common.Models;
 using SqlBrokerToAzureAdapter.Transformations;
 using SqlBrokerToAzureAdapter.Transformations.Models;
 

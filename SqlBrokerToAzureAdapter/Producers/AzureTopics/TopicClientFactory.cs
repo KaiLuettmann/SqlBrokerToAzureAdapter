@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Extensions.Logging;
+using SqlBrokerToAzureAdapter.Producers.Common.Models;
 
 namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
 {

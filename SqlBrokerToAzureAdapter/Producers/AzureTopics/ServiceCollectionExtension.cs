@@ -2,9 +2,9 @@ using System.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SqlBrokerToAzureAdapter.Producers.AzureTopics;
-using SqlBrokerToAzureAdapter.Producers.AzureTopics.Models;
+using SqlBrokerToAzureAdapter.Producers.Common.Models;
 
-namespace SqlBrokerToAzureAdapter.Producers
+namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
 {
     internal static class ServiceCollectionExtension
     {

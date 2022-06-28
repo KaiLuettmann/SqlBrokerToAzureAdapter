@@ -1,6 +1,6 @@
 using System;
 
-namespace SqlBrokerToAzureAdapter.Producers.AzureTopics.Models
+namespace SqlBrokerToAzureAdapter.Producers.Common.Models
 {
     /// <summary>
     /// The Event which should be published

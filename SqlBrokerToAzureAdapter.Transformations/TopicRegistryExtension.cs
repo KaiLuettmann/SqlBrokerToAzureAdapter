@@ -1,4 +1,4 @@
-using SqlBrokerToAzureAdapter.Producers.AzureTopics;
+using SqlBrokerToAzureAdapter.Producers.Common.Models;
 using SqlBrokerToAzureAdapter.Users;
 
 namespace SqlBrokerToAzureAdapter

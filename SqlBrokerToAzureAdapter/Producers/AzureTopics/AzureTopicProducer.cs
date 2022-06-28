@@ -9,8 +9,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SqlBrokerToAzureAdapter.Extensions;
 using SqlBrokerToAzureAdapter.MessageContracts;
-using SqlBrokerToAzureAdapter.Producers.AzureTopics.Exceptions;
-using SqlBrokerToAzureAdapter.Producers.AzureTopics.Models;
+using SqlBrokerToAzureAdapter.Producers.Common.Exceptions;
+using SqlBrokerToAzureAdapter.Producers.Common.Models;
 
 namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
 {
