@@ -1,6 +1,4 @@
-using SqlBrokerToAzureAdapter.MessageContracts;
-using SqlBrokerToAzureAdapter.Producers;
-using SqlBrokerToAzureAdapter.Producers.Common.Models;
+using SqlBrokerToAzureAdapter.Adapter.Models;
 
 namespace SqlBrokerToAzureAdapter.Transformations
 {

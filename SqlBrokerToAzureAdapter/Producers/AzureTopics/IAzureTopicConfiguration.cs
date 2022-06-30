@@ -1,7 +1,9 @@
+using SqlBrokerToAzureAdapter.Adapter;
+
 namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
 {
     /// <summary>
-    /// Configuration for the execution of <see cref="IAzureTopicProducer" />.
+    /// Configuration for the execution of <see cref="ITopicProducer" />.
     /// </summary>
     public interface IAzureTopicConfiguration
     {

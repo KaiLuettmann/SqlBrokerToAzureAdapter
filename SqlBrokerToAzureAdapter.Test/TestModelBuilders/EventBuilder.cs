@@ -1,4 +1,4 @@
-using SqlBrokerToAzureAdapter.Producers.Common.Models;
+using SqlBrokerToAzureAdapter.Adapter.Models;
 
 namespace SqlBrokerToAzureAdapter.Test.TestModelBuilders
 {

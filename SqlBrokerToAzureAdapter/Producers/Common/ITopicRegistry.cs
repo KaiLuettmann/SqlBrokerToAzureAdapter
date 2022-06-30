@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SqlBrokerToAzureAdapter.Producers.Common.Models
+namespace SqlBrokerToAzureAdapter.Producers.Common
 {
     /// <summary>
     /// The Registry of topics.

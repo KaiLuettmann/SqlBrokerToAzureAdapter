@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues;
-using SqlBrokerToAzureAdapter.Producers.Common.Models;
+using SqlBrokerToAzureAdapter.Producers.Common;
 using SqlBrokerToAzureAdapter.Setup;
 using SqlBrokerToAzureAdapter.Setup.Consumers.SqlBrokerQueues;
 

@@ -9,9 +9,8 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using SqlBrokerToAzureAdapter.Adapter;
 using SqlBrokerToAzureAdapter.Adapter.Exceptions;
+using SqlBrokerToAzureAdapter.Adapter.Models;
 using SqlBrokerToAzureAdapter.MessageContracts;
-using SqlBrokerToAzureAdapter.Producers.AzureTopics;
-using SqlBrokerToAzureAdapter.Producers.Common.Models;
 using SqlBrokerToAzureAdapter.Test.TestModelBuilders;
 using SqlBrokerToAzureAdapter.Test.TestUtilities.Moq;
 using SqlBrokerToAzureAdapter.Transformations;
@@ -113,7 +112,7 @@ namespace SqlBrokerToAzureAdapter.Test.Adapter
             //Assert
             using (new AssertionScope())
             {
-                _fixture.ProducerMock.Verify(x => x.PublishAsync(It.IsAny<Metadata>(), It.IsAny<IList<Event>>()),
+                _fixture.ProducerMock.Verify(x => x.PublishAsync(It.IsAny<Metadata>(), It.IsAny<Events>()),
                     Times.Never);
             }
         }
@@ -177,7 +176,7 @@ namespace SqlBrokerToAzureAdapter.Test.Adapter
             {
                 _fixture.ProducerMock.Verify(x => x.PublishAsync(
                         It.Is<Metadata>(value => value == _fixture.Metadata),
-                        It.Is<IList<Event>>(value => value.Count == expectedEventCount)),
+                        It.Is<Events>(value => value.Count() == expectedEventCount)),
                     Times.Exactly(expectedPublishCalls));
             }
         }
@@ -265,7 +264,7 @@ namespace SqlBrokerToAzureAdapter.Test.Adapter
             //Assert
             using (new AssertionScope())
             {
-                _fixture.ProducerMock.Verify(x => x.PublishAsync(It.IsAny<Metadata>(), It.IsAny<IList<Event>>()),
+                _fixture.ProducerMock.Verify(x => x.PublishAsync(It.IsAny<Metadata>(), It.IsAny<Events>()),
                     Times.Never);
             }
         }
@@ -329,7 +328,7 @@ namespace SqlBrokerToAzureAdapter.Test.Adapter
             {
                 _fixture.ProducerMock.Verify(x => x.PublishAsync(
                         It.Is<Metadata>(value => value == _fixture.Metadata),
-                        It.Is<IList<Event>>(value => value.Count == expectedEventCount)),
+                        It.Is<Events>(value => value.Count() == expectedEventCount)),
                     Times.Exactly(expectedPublishCalls));
             }
         }
@@ -423,7 +422,7 @@ namespace SqlBrokerToAzureAdapter.Test.Adapter
             //Assert
             using (new AssertionScope())
             {
-                _fixture.ProducerMock.Verify(x => x.PublishAsync(It.IsAny<Metadata>(), It.IsAny<IList<Event>>()),
+                _fixture.ProducerMock.Verify(x => x.PublishAsync(It.IsAny<Metadata>(), It.IsAny<Events>()),
                     Times.Never);
             }
         }
@@ -503,7 +502,7 @@ namespace SqlBrokerToAzureAdapter.Test.Adapter
             {
                 _fixture.ProducerMock.Verify(x => x.PublishAsync(
                     It.Is<Metadata>(value => value == _fixture.Metadata),
-                    It.IsAny<IList<Event>>()), Times.Never);
+                    It.IsAny<Events>()), Times.Never);
             }
         }
 
@@ -534,7 +533,7 @@ namespace SqlBrokerToAzureAdapter.Test.Adapter
             {
                 _fixture.ProducerMock.Verify(x => x.PublishAsync(
                         It.Is<Metadata>(value => value == _fixture.Metadata),
-                        It.Is<IList<Event>>(value => value.Count == expectedEventCount)),
+                        It.Is<Events>(value => value.Count() == expectedEventCount)),
                     Times.Exactly(expectedPublishCalls));
             }
         }
@@ -565,14 +564,14 @@ namespace SqlBrokerToAzureAdapter.Test.Adapter
                 _mockRepository = new MockRepository(MockBehavior.Strict);
                 _comparerMock = _mockRepository.Create<IObjectComparer<FakeDataBaseContract>>();
                 _configurationMock = _mockRepository.Create<ISqlBrokerToAzureAdapterConfiguration>();
-                ProducerMock = _mockRepository.Create<IAzureTopicProducer>();
+                ProducerMock = _mockRepository.Create<ITopicProducer>();
                 _eventBuilder = new EventBuilder();
                 _comparedUpdatedPairBuilder = new ComparedUpdatedPairBuilder<FakeDataBaseContract>();
 
                 SetupThrowIfNoEventTransformationIsPresent(true);
             }
 
-            internal Mock<IAzureTopicProducer> ProducerMock { get; }
+            internal Mock<ITopicProducer> ProducerMock { get; }
 
             internal IEnumerable<Mock<IAddEventTransformation<FakeDataBaseContract>>> AddEventTransformationMocks
             {
@@ -686,7 +685,7 @@ namespace SqlBrokerToAzureAdapter.Test.Adapter
 
                     ProducerMock.Setup(x => x.PublishAsync(
                             It.Is<Metadata>(value => value == Metadata),
-                            It.Is<IList<Event>>(value => value.Contains(@event))))
+                            It.Is<Events>(value => value.Contains(@event))))
                         .Returns(Task.CompletedTask);
                 }
             }
@@ -701,7 +700,7 @@ namespace SqlBrokerToAzureAdapter.Test.Adapter
 
                     ProducerMock.Setup(x => x.PublishAsync(
                             It.Is<Metadata>(value => value == Metadata),
-                            It.Is<IList<Event>>(value => value.Contains(@event))))
+                            It.Is<Events>(value => value.Contains(@event))))
                         .Returns(Task.CompletedTask);
                 }
             }
@@ -718,7 +717,7 @@ namespace SqlBrokerToAzureAdapter.Test.Adapter
 
                     ProducerMock.Setup(x => x.PublishAsync(
                             It.Is<Metadata>(value => value == Metadata),
-                            It.Is<IList<Event>>(value => value.Contains(@event))))
+                            It.Is<Events>(value => value.Contains(@event))))
                         .Returns(Task.CompletedTask);
                 }
             }
