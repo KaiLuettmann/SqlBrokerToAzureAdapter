@@ -28,8 +28,12 @@ namespace SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues
         {
             if (_transaction != null) await RollbackTransactionAsync();
 
-            await _sqlConnection.DisposeAsync();
-            _sqlConnection = null;
+            if (_sqlConnection != null)
+            {
+                await _sqlConnection.DisposeAsync();
+                _sqlConnection = null;
+            }
+
         }
 
         public Task SkipCurrentBrokerMessageAsync()
@@ -89,7 +93,7 @@ namespace SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues
             if (_transaction != null)
                 throw new InvalidOperationException("A transaction before was not commited or rollbacked");
 
-            _transaction = (SqlTransaction) await _sqlConnection.BeginTransactionAsync();
+            _transaction = (SqlTransaction)await _sqlConnection.BeginTransactionAsync();
         }
 
         public async Task OpenSqlConnectionAsync()
@@ -111,7 +115,7 @@ namespace SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues
             var sql = sb.ToString();
 
             var top = _skippedBrokerMessageJustifiedOfErrors + 1;
-            await using var command = new SqlCommand(sql, _sqlConnection) {Transaction = _transaction};
+            await using var command = new SqlCommand(sql, _sqlConnection) { Transaction = _transaction };
             command.Parameters.Add("@top", SqlDbType.Int);
             command.Parameters["@top"].Value = top;
 

@@ -40,7 +40,7 @@ namespace SqlBrokerToAzureAdapter.Test.Producers.AzureTopics
         [InlineData(8000, 1000, 15, 8)]
         [InlineData(9000, 1000, 31, 16)]
         [InlineData(10000, 1000, 31, 16)]
-        public void Publish_WithManyMessages_ShouldBatch(int messageCount, int maxMessageCountPerBatch, int expectedBatchTries, int expectedSuccessfullySend)
+        public async Task Publish_WithManyMessages_ShouldBatch(int messageCount, int maxMessageCountPerBatch, int expectedBatchTries, int expectedSuccessfullySend)
         {
             //Arrange
             _fixture.SetupEventsWithCount(messageCount);
@@ -48,7 +48,7 @@ namespace SqlBrokerToAzureAdapter.Test.Producers.AzureTopics
             var testObject = _fixture.CreateTestObject();
 
             //Act
-            testObject.PublishAsync(_fixture.Metadata, _fixture.Events);
+            await testObject.PublishAsync(_fixture.Metadata, _fixture.Events);
 
             //Assert
             using (new AssertionScope())
