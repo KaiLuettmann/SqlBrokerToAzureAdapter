@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues;
 using SqlBrokerToAzureAdapter.Producers.Common.Models;
@@ -15,18 +16,34 @@ namespace SqlBrokerToAzureAdapter
     {
         public static async Task Main(string[] args)
         {
-            var program = new Program();
-            var serviceCollection = program.ConfigureServices();
-            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var configurationBuilder = ConfigureConfiguration(new ConfigurationBuilder());
+            var config = configurationBuilder.Build();
+            var host = new HostBuilder()
+                .ConfigureLogging(loggingBuilder =>
+                {
+                    loggingBuilder.AddConsole();
+                    loggingBuilder.AddConfiguration(config.GetSection("Logging"));
+                })
+                .ConfigureAppConfiguration(configurationBuilder =>
+                {
+                    ConfigureConfiguration(configurationBuilder);
+                })
+                .ConfigureServices(serviceCollection =>
+                {
+                    ConfigureHostServices(serviceCollection, config);
+                    serviceCollection.AddHostedService<SqlBrokerQueueConsumerHostedService>();
+                })
+                .Build();
+
+            ConfigureAppServices(host.Services);
 
             switch (args[0])
             {
                 case "run":
-                    var consumer = Configure(serviceProvider);
-                    await consumer.RunAsync(CancellationToken.None);
+                    await host.RunAsync();
                     break;
                 case "install":
-                    var consumerInstallation = serviceProvider.GetRequiredService<ISqlBrokerQueueInstallation>();
+                    var consumerInstallation = host.Services.GetRequiredService<ISqlBrokerQueueInstallation>();
                     await consumerInstallation.InstallAsync(CancellationToken.None);
                     break;
                 default:
@@ -34,7 +51,7 @@ namespace SqlBrokerToAzureAdapter
             }
         }
 
-        internal static ISqlBrokerQueueConsumer Configure(ServiceProvider serviceProvider)
+        internal static IServiceProvider ConfigureAppServices(IServiceProvider serviceProvider)
         {
             var brokerMessageHandlers = serviceProvider.GetRequiredService<ISqlBrokerMessageHandlerCollection>();
             brokerMessageHandlers.AddSqlBrokerMessageHandlers(serviceProvider);
@@ -42,16 +59,14 @@ namespace SqlBrokerToAzureAdapter
             var topicRegistrations = serviceProvider.GetRequiredService<ITopicRegistry>();
             topicRegistrations.AddTopicRegistrations();
 
-            var consumer = serviceProvider.GetRequiredService<ISqlBrokerQueueConsumer>();
-            return consumer;
+            return serviceProvider;
         }
 
-        internal IServiceCollection ConfigureServices()
+        internal static IServiceCollection ConfigureHostServices(IServiceCollection serviceCollection, IConfigurationRoot config)
         {
-            var config = GetConfiguration();
             var loggerFactory = CreateLoggerFactory(config);
 
-            return new ServiceCollection()
+            return serviceCollection
                 .AddLogging()
                 .AddSingleton(x => loggerFactory)
                 .AddSqlBrokerToAzureAdapterSetup(config)
@@ -64,15 +79,15 @@ namespace SqlBrokerToAzureAdapter
             return LoggerFactory.Create(builder => builder.AddConsole().AddConfiguration(config.GetSection("Logging")));
         }
 
-        private static IConfigurationRoot GetConfiguration()
+        private static IConfigurationBuilder ConfigureConfiguration(IConfigurationBuilder configurationBuilder)
         {
             var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            var builder = new ConfigurationBuilder()
+            var builder = configurationBuilder
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{env}.json", true, true)
                 .AddEnvironmentVariables();
 
-            return builder.Build();
+            return builder;
         }
     }
 }

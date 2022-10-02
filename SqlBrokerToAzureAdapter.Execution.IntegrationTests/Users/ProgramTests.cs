@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues;
 using SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues.Models;
@@ -58,9 +59,10 @@ namespace SqlBrokerToAzureAdapter.IntegrationTests.Users
             public Fixture()
             {
                 Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT","Development");
+                var config = new ConfigurationBuilder().Build();
                 _sqlBrokerConsumerFixture = new SqlBrokerConsumerFixture();
                 _azureTopicProducerFixture = new AzureTopicProducerFixture();
-                _serviceCollection = new Program().ConfigureServices();
+                _serviceCollection = Program.ConfigureHostServices(new ServiceCollection(), config);
                 _topicPublishStoragePath = Path.GetFullPath("TopicPublishStorage.json");
                 _cancellationTokenSource = new CancellationTokenSource();
 
@@ -69,8 +71,9 @@ namespace SqlBrokerToAzureAdapter.IntegrationTests.Users
 
             private ISqlBrokerQueueConsumer CreateTestObject()
             {
-                var serviceProvider = _serviceCollection.BuildServiceProvider();
-                return Program.Configure(serviceProvider);
+                IServiceProvider serviceProvider = _serviceCollection.BuildServiceProvider();
+                serviceProvider = Program.ConfigureAppServices(serviceProvider);
+                return serviceProvider.GetRequiredService<ISqlBrokerQueueConsumer>();
             }
 
             public void SetupSqlBrokerReturnsSequence(params BrokerMessage[] brokerMessages)

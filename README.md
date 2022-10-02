@@ -79,7 +79,7 @@ info: SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues.SqlBrokerMessageHandler[
 info: SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues.SqlBrokerMessageHandler[0]
 Update detected.
 dbug: SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues.MessageBodyDeserializer[0]
-Deserializing message body [{"OldValue":{"Id":1,"Lastname":"Mustermann","Firstname":"Max","Phone":"0123456","EMail":"max@mustermann.de","NickName":"Maxi"},"NewValue":{"Id":2,"Lastname":"Mustermann","Firstname":"Maximilian","Phone":"0123456","EMail":"max@mustermann.de","NickName":"Maxi"}},].
+Deserializing message body [{"OldValue":{"Id":1,"Lastname":"Mustermann","Firstname":"Max","Phone":"0123456","EMail":"max@mustermann.de","NickName":"Maxi"},"NewValue":{"Id":1,"Lastname":"Mustermann","Firstname":"Maximilian","Phone":"0123456","EMail":"max@mustermann.de","NickName":"Maxi"}},].
 dbug: SqlBrokerToAzureAdapter.Transformations.ObjectComparer[0]
 The following members are changed: Firstname
 dbug: SqlBrokerToAzureAdapter.Adapter.SqlBrokerToAzureAdapter[0]
