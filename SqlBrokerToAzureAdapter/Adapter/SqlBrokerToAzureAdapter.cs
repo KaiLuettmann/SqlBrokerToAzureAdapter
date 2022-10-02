@@ -55,7 +55,7 @@ namespace SqlBrokerToAzureAdapter.Adapter
             var valueList = values.ToList();
             foreach (var addEventTransformation in _addEventTransformations)
             {
-                if (!valueList.Any())
+                if (valueList.Count == 0)
                 {
                     continue;
                 }
@@ -143,7 +143,7 @@ namespace SqlBrokerToAzureAdapter.Adapter
             var valueList = values.ToList();
             foreach (var removeEventTransformation in _removeEventTransformations)
             {
-                if (!valueList.Any())
+                if (valueList.Count == 0)
                 {
                     continue;
                 }

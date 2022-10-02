@@ -19,17 +19,14 @@ namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
 {
     internal sealed class AzureTopicProducer : ITopicProducer
     {
-        private readonly ITopicRegistry _topicRegistry;
         private readonly IAzureTopicClientFactory _azureTopicClientFactory;
         private readonly ILogger<AzureTopicProducer> _logger;
 
         public AzureTopicProducer(
             ILogger<AzureTopicProducer> logger,
-            ITopicRegistry topicRegistry,
             IAzureTopicClientFactory azureTopicClientFactory)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _topicRegistry = topicRegistry ?? throw new ArgumentNullException(nameof(topicRegistry));
             _azureTopicClientFactory = azureTopicClientFactory ?? throw new ArgumentNullException(nameof(azureTopicClientFactory));
         }
 
@@ -59,13 +56,9 @@ namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
             }
             //unless this issue is open there is not good option to calculate the size of a message: https://github.com/Azure/azure-service-bus-dotnet/issues/538
             //one option is described in https://weblogs.asp.net/sfeldman/asb-batching-brokered-messages
-            catch (MessageSizeExceededException e)
+            catch (MessageSizeExceededException e) when (messages.Count > 1)
             {
-                if (messages.Count <= 1)
-                {
-                    throw;
-                }
-                _logger.LogDebug(e,$"Send {messages.Count}  messages to topic failed. Split messages and retry...");
+                _logger.LogDebug(e, $"Send {messages.Count}  messages to topic failed. Split messages and retry...");
                 var nextMessageCount = messages.Count / 2;
                 await SendAsync(topicClient, messages.Take(nextMessageCount).ToList());
                 await SendAsync(topicClient, messages.Skip(nextMessageCount).ToList());

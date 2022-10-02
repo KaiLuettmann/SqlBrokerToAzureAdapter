@@ -33,7 +33,6 @@ namespace SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues
                 await _sqlConnection.DisposeAsync();
                 _sqlConnection = null;
             }
-
         }
 
         public Task SkipCurrentBrokerMessageAsync()
@@ -110,8 +109,8 @@ namespace SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues
             sb.Append(
                 "receive top (@top) conversation_handle, message_enqueue_time, message_type_name, CAST(message_body AS NVARCHAR(MAX)) message_body ");
             sb.Append(
-                $"FROM [{_sqlBrokerQueueConfiguration.DatabaseName}].[{_sqlBrokerQueueConfiguration.SchemaName}].[{_sqlBrokerQueueConfiguration.ReceiverQueueName}] ");
-            sb.Append($"),  TIMEOUT @longPollingTimeout");
+                "FROM [").Append(_sqlBrokerQueueConfiguration.DatabaseName).Append("].[").Append(_sqlBrokerQueueConfiguration.SchemaName).Append("].[").Append(_sqlBrokerQueueConfiguration.ReceiverQueueName).Append("] ");
+            sb.Append("),  TIMEOUT @longPollingTimeout");
             var sql = sb.ToString();
 
             var top = _skippedBrokerMessageJustifiedOfErrors + 1;

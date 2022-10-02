@@ -16,8 +16,8 @@ namespace SqlBrokerToAzureAdapter.Consumers
                 throw new ConfigurationErrorsException("Could not load the configuration for the 'SqlBrokerQueue'. Did you forget to create an appsettings.json file?");
             }
             collection
-                .AddScoped<ISqlBrokerMessageHandlerCollection>(x => new SqlBrokerMessageHandlerCollection())
-                .AddScoped<ISqlBrokerQueueConfiguration>(x => config)
+                .AddScoped<ISqlBrokerMessageHandlerCollection>(_ => new SqlBrokerMessageHandlerCollection())
+                .AddScoped<ISqlBrokerQueueConfiguration>(_ => config)
                 .AddScoped<ISqlBrokerQueueRepository, SqlBrokerQueueRepository>()
                 .AddScoped<ISqlBrokerQueueConsumer, SqlBrokerQueueConsumer>();
         }

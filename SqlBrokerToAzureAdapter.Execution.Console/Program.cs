@@ -12,7 +12,7 @@ using SqlBrokerToAzureAdapter.Setup.Consumers.SqlBrokerQueues;
 
 namespace SqlBrokerToAzureAdapter
 {
-    public class Program
+    public static class Program
     {
         public static async Task Main(string[] args)
         {
@@ -24,10 +24,7 @@ namespace SqlBrokerToAzureAdapter
                     loggingBuilder.AddConsole();
                     loggingBuilder.AddConfiguration(config.GetSection("Logging"));
                 })
-                .ConfigureAppConfiguration(configurationBuilder =>
-                {
-                    ConfigureConfiguration(configurationBuilder);
-                })
+                .ConfigureAppConfiguration(configurationBuilder => ConfigureConfiguration(configurationBuilder))
                 .ConfigureServices(serviceCollection =>
                 {
                     ConfigureHostServices(serviceCollection, config);

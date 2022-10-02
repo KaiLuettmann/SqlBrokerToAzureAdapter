@@ -7,6 +7,5 @@ namespace SqlBrokerToAzureAdapter.Adapter.Exceptions
     /// </summary>
     public class MissingAddEventTransformationException : Exception
     {
-
     }
 }

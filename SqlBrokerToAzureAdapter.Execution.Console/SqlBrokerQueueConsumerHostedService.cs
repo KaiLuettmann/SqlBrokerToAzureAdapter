@@ -6,7 +6,7 @@ using SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues;
 namespace SqlBrokerToAzureAdapter{
     public class SqlBrokerQueueConsumerHostedService : IHostedService
     {
-        private ISqlBrokerQueueConsumer _consumer;
+        private readonly ISqlBrokerQueueConsumer _consumer;
 
         public SqlBrokerQueueConsumerHostedService(ISqlBrokerQueueConsumer consumer)
         {
