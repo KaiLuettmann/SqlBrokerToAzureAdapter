@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using SqlBrokerToAzureAdapter.Adapter.Models;
 using SqlBrokerToAzureAdapter.MessageContracts;
-using SqlBrokerToAzureAdapter.Producers.Common.Models;
 using SqlBrokerToAzureAdapter.Transformations;
 using SqlBrokerToAzureAdapter.Users.SqlBrokerMessageContracts;
 

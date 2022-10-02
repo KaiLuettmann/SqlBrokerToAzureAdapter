@@ -1,8 +1,8 @@
 using System.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SqlBrokerToAzureAdapter.Producers.AzureTopics;
-using SqlBrokerToAzureAdapter.Producers.Common.Models;
+using SqlBrokerToAzureAdapter.Adapter;
+using SqlBrokerToAzureAdapter.Producers.Common;
 
 namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
 {
@@ -16,11 +16,12 @@ namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
             {
                 throw new ConfigurationErrorsException("Could not load the configuration for the 'AzureTopicProducer'. Did you forget to create an appsettings.json file?");
             }
+
+            collection.AddCommon();
             collection
                 .AddScoped<IAzureTopicConfiguration>(x => configuration.Get<AzureTopicConfiguration>())
-                .AddScoped<ITopicRegistry>(x => new TopicRegistry())
-                .AddScoped<ITopicClientFactory, TopicClientFactory>()
-                .AddScoped<IAzureTopicProducer, AzureTopicProducer>();
+                .AddScoped<IAzureTopicClientFactory, AzureTopicClientFactory>()
+                .AddScoped<ITopicProducer, AzureTopicProducer>();
         }
     }
 }

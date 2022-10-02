@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace SqlBrokerToAzureAdapter.Producers.Common.Models
+namespace SqlBrokerToAzureAdapter.Producers.Common
 {
     internal sealed class TopicRegistry : ITopicRegistry
     {

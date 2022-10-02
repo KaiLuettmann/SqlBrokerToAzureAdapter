@@ -4,10 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SqlBrokerToAzureAdapter.Adapter.Exceptions;
+using SqlBrokerToAzureAdapter.Adapter.Models;
 using SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues;
 using SqlBrokerToAzureAdapter.MessageContracts;
-using SqlBrokerToAzureAdapter.Producers.AzureTopics;
-using SqlBrokerToAzureAdapter.Producers.Common.Models;
 using SqlBrokerToAzureAdapter.Transformations;
 using SqlBrokerToAzureAdapter.Transformations.Models;
 
@@ -20,7 +19,7 @@ namespace SqlBrokerToAzureAdapter.Adapter
         private readonly IEditEventTransformations<TDatabaseContract> _editEventTransformations;
         private readonly ILogger<SqlBrokerToAzureAdapter<TDatabaseContract>> _logger;
         private readonly ISqlBrokerToAzureAdapterConfiguration _configuration;
-        private readonly IAzureTopicProducer _producer;
+        private readonly ITopicProducer _producer;
         private readonly IRemoveEventTransformations<TDatabaseContract> _removeEventTransformations;
 
         public SqlBrokerToAzureAdapter(
@@ -29,7 +28,7 @@ namespace SqlBrokerToAzureAdapter.Adapter
             IAddEventTransformations<TDatabaseContract> addEventTransformations,
             IEditEventTransformations<TDatabaseContract> editEventTransformations,
             IRemoveEventTransformations<TDatabaseContract> removeEventTransformations,
-            IAzureTopicProducer producer,
+            ITopicProducer producer,
             IObjectComparer<TDatabaseContract> comparer)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -66,7 +65,7 @@ namespace SqlBrokerToAzureAdapter.Adapter
             }
         }
 
-        private IList<Event> TransformEditedValues(IEnumerable<TDatabaseContract> valueList, IAddEventTransformation<TDatabaseContract> addEventTransformation)
+        private Events TransformEditedValues(IEnumerable<TDatabaseContract> valueList, IAddEventTransformation<TDatabaseContract> addEventTransformation)
         {
             IList<Event> events = new List<Event>();
             foreach (var @event in valueList.Select(addEventTransformation.Transform))
@@ -76,7 +75,7 @@ namespace SqlBrokerToAzureAdapter.Adapter
                 events.Add(@event);
             }
 
-            return events;
+            return new Events(events);
         }
 
         public async Task ReceiveUpdatedAsync(Metadata metadata, IEnumerable<UpdatedPair<TDatabaseContract>> values)
@@ -105,7 +104,7 @@ namespace SqlBrokerToAzureAdapter.Adapter
             }
         }
 
-        private IList<Event> TransformEditedValues(IEditEventTransformation<TDatabaseContract> editEventTransformation, List<ComparedUpdatedPair<TDatabaseContract>> comparedValues)
+        private Events TransformEditedValues(IEditEventTransformation<TDatabaseContract> editEventTransformation, List<ComparedUpdatedPair<TDatabaseContract>> comparedValues)
         {
             var events = new List<Event>();
             foreach (var comparedValue in comparedValues)
@@ -126,7 +125,7 @@ namespace SqlBrokerToAzureAdapter.Adapter
                 events.Add(@event);
             }
 
-            return events;
+            return new Events(events);
         }
 
         public async Task ReceiveDeletedAsync(Metadata metadata, IEnumerable<TDatabaseContract> values)
@@ -153,7 +152,7 @@ namespace SqlBrokerToAzureAdapter.Adapter
             }
         }
 
-        private List<Event> TransformRemovedValues(IEnumerable<TDatabaseContract> valueList, IRemoveEventTransformation<TDatabaseContract> removeEventTransformation)
+        private Events TransformRemovedValues(IEnumerable<TDatabaseContract> valueList, IRemoveEventTransformation<TDatabaseContract> removeEventTransformation)
         {
             var events = new List<Event>();
             foreach (var @event in valueList.Select(removeEventTransformation.Transform))
@@ -163,7 +162,7 @@ namespace SqlBrokerToAzureAdapter.Adapter
                 events.Add(@event);
             }
 
-            return events;
+            return new Events(events);
         }
     }
 }

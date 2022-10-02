@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
+using SqlBrokerToAzureAdapter.Extensions;
 
-namespace SqlBrokerToAzureAdapter.Producers.Common.Models
+namespace SqlBrokerToAzureAdapter.Adapter.Models
 {
     /// <summary>
     /// The Event which should be published
@@ -32,5 +34,7 @@ namespace SqlBrokerToAzureAdapter.Producers.Common.Models
         /// The payload of the event
         /// </summary>
         public object Payload { get;  }
+
+        internal Type PayloadType => Payload.GetType();
     }
 }

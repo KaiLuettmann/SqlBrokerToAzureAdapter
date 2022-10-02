@@ -1,36 +1,39 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Azure.ServiceBus.Core;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using SqlBrokerToAzureAdapter.Extensions;
+using SqlBrokerToAzureAdapter.Adapter;
+using SqlBrokerToAzureAdapter.Adapter.Models;
 using SqlBrokerToAzureAdapter.MessageContracts;
+using SqlBrokerToAzureAdapter.Producers.Common;
 using SqlBrokerToAzureAdapter.Producers.Common.Exceptions;
 using SqlBrokerToAzureAdapter.Producers.Common.Models;
 
 namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
 {
-    internal sealed class AzureTopicProducer : IAzureTopicProducer
+    internal sealed class AzureTopicProducer : ITopicProducer
     {
         private readonly ITopicRegistry _topicRegistry;
-        private readonly ITopicClientFactory _topicClientFactory;
+        private readonly IAzureTopicClientFactory _azureTopicClientFactory;
         private readonly ILogger<AzureTopicProducer> _logger;
 
         public AzureTopicProducer(
             ILogger<AzureTopicProducer> logger,
             ITopicRegistry topicRegistry,
-            ITopicClientFactory topicClientFactory)
+            IAzureTopicClientFactory azureTopicClientFactory)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _topicRegistry = topicRegistry ?? throw new ArgumentNullException(nameof(topicRegistry));
-            _topicClientFactory = topicClientFactory ?? throw new ArgumentNullException(nameof(topicClientFactory));
+            _azureTopicClientFactory = azureTopicClientFactory ?? throw new ArgumentNullException(nameof(azureTopicClientFactory));
         }
 
-        public async Task PublishAsync(Metadata metadata, IList<Event> events)
+        public async Task PublishAsync(Metadata metadata, Events events)
         {
             if (events == null)
             {
@@ -41,9 +44,9 @@ namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
             {
                 return;
             }
-            var payloadType = events.First().Payload.GetType();
-            var topicClient = _topicClientFactory.Get(payloadType);
-            var messages = BuildMessages(metadata, payloadType, events).ToList();
+
+            var topicClient = _azureTopicClientFactory.Get(events.PayloadType);
+            var messages = BuildMessages(metadata, events).ToList();
             await SendAsync(topicClient, messages);
             _logger.LogInformation($"Azure-Events published to Azure on topic '{topicClient.TopicName}'");
         }
@@ -77,21 +80,12 @@ namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
             }
         }
 
-        private static void EnsurePayloadHasPayloadType(Type expectedPayloadType, Event @event)
+        private IEnumerable<Message> BuildMessages(Metadata metadata, IEnumerable<Event> events)
         {
-            var actualPayloadType = @event.Payload.GetType();
-            if ( actualPayloadType != expectedPayloadType)
-            {
-                throw new UnexpectedPayloadTypeException($"The payload of the event has unexpected type of payload. Expected payload is '{expectedPayloadType.FullName}' but was '{actualPayloadType}'. Ensure all payloads of the delivered events have the same type of payload.");
-            }
+            return events.Select(@event => BuildMessage(metadata, @event));
         }
 
-        private IEnumerable<Message> BuildMessages(Metadata metadata, Type payloadType, IEnumerable<Event> events)
-        {
-            return events.Select(@event => BuildMessage(metadata, payloadType, @event));
-        }
-
-        private Message BuildMessage(Metadata metadata, Type payloadType, Event @event)
+        private Message BuildMessage(Metadata metadata, Event @event)
         {
             if (metadata == null)
             {
@@ -99,28 +93,19 @@ namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
             }
 
             EnsureEntityIdIsNotEqualToCorrelationId(metadata, @event);
-            EnsurePayloadHasPayloadType(payloadType, @event);
+
+            var messageId = new MessageId(metadata.CorrelationId, @event.EntityId, @event.PayloadType);
             var messageBody = JsonConvert.SerializeObject(@event.Payload);
             _logger.LogTrace("Azure-Event serialized.");
+
             return new Message(Encoding.UTF8.GetBytes(messageBody))
             {
                 CorrelationId = metadata.CorrelationId.ToString(),
-                Label = _topicRegistry[payloadType],
-                MessageId = GetMessageId(metadata, @event),
-                ContentType = payloadType.FullName,
+                Label = @event.PayloadType.FullName,
+                MessageId = messageId.ToString(),
+                ContentType = MediaTypeNames.Application.Json,
                 UserProperties = {{"Timestamp",metadata.Timestamp}}
             };
-        }
-
-        private static string GetMessageId(Metadata metadata, Event @event)
-        {
-            var traversedFullname = TraverseAtDots(@event.Payload.GetType().FullName);
-            return $"{metadata.CorrelationId}-{@event.EntityId}-{traversedFullname}".Truncate(128);
-        }
-
-        private static string TraverseAtDots(string fullName)
-        {
-            return string.Join(".",fullName.Split(".").Reverse());
         }
     }
 }
