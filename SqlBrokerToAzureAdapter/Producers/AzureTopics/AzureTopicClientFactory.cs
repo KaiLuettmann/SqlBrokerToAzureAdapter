@@ -18,6 +18,7 @@ namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
+
         public ITopicClient Get(Type payloadType)
         {
             if (!_topicRegistry.TryGetValue(payloadType, out var topic))
