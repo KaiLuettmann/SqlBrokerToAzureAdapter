@@ -287,7 +287,6 @@ namespace SqlBrokerToAzureAdapter.Test.Producers.AzureTopics
         private class Fixture
         {
             private readonly Mock<IAzureTopicClientFactory> _topicClientFactory;
-            private readonly Mock<ITopicRegistry> _topicRegistrationMock;
             private readonly ILogger<AzureTopicProducer> _logger;
             public FakePayload SourcePayload { get; } = new FakePayload {FakeProperty = "FakeProperty"};
             public string Topic { get; } = "FakeTopic";
@@ -299,7 +298,6 @@ namespace SqlBrokerToAzureAdapter.Test.Producers.AzureTopics
             {
                 _topicClientFactory = new Mock<IAzureTopicClientFactory>();
                 TopicClient = new Mock<ITopicClient>();
-                _topicRegistrationMock = new Mock<ITopicRegistry>();
                 _logger = logger;
 
                 _topicClientFactory.Setup(x => x.Get(It.IsAny<Type>())).Returns(TopicClient.Object);
@@ -314,7 +312,6 @@ namespace SqlBrokerToAzureAdapter.Test.Producers.AzureTopics
             {
                 return new AzureTopicProducer(
                     _logger,
-                    _topicRegistrationMock.Object,
                     _topicClientFactory.Object
                 );
             }
@@ -351,9 +348,6 @@ namespace SqlBrokerToAzureAdapter.Test.Producers.AzureTopics
 
             public void SetupTopicClientSuccessfully()
             {
-                _topicRegistrationMock.SetupGet(x => x[typeof(FakePayload)])
-                    .Returns(Topic);
-
                 TopicClient.Setup(x => x.SendAsync(It.IsAny<IList<Message>>()))
                     .Callback<IList<Message>>(messages => SendMessages.AddRange(messages));
             }
