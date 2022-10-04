@@ -7,5 +7,16 @@ namespace SqlBrokerToAzureAdapter.Adapter.Exceptions
     /// </summary>
     public class MissingEditEventTransformationException : Exception
     {
+        internal MissingEditEventTransformationException() : base()
+        {
+        }
+
+        internal MissingEditEventTransformationException(string message) : base(message)
+        {
+        }
+
+        internal MissingEditEventTransformationException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
     }
 }
