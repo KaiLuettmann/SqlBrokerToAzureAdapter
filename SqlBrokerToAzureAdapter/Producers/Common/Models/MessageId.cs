@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using SqlBrokerToAzureAdapter.Common;
+using SqlBrokerToAzureAdapter.Producers.Common.Exceptions;
 
 namespace SqlBrokerToAzureAdapter.Producers.Common.Models
 {
@@ -10,6 +11,15 @@ namespace SqlBrokerToAzureAdapter.Producers.Common.Models
     {
         public MessageId(Guid correlationId, string entityId, Type payloadType) : base(CreateMd5(correlationId, entityId, payloadType))
         {
+            EnsureEntityIdIsNotEqualToCorrelationId(correlationId, entityId);
+        }
+
+        private static void EnsureEntityIdIsNotEqualToCorrelationId(Guid correlationId, string @entityId)
+        {
+            if (correlationId.ToString() == entityId)
+            {
+                throw new InvalidEntityIdException($"The entity id '{entityId}' should not be equal to the correlation id '{correlationId}'.");
+            }
         }
 
         public override string ToString()

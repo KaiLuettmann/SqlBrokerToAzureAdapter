@@ -6,9 +6,18 @@ using SqlBrokerToAzureAdapter.Producers.Common;
 
 namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
 {
-    internal static class ServiceCollectionExtension
+    /// <summary>
+    /// Extensions for the <see cref="IServiceCollection"/> to add producer
+    /// </summary>
+    public static class ServiceCollectionExtension
     {
-        internal static void AddAzureQueueProducer(this IServiceCollection collection,
+        /// <summary>
+        /// Adds Azure topic producer
+        /// </summary>
+        /// <param name="collection">the service collection</param>
+        /// <param name="configuration">The configuration</param>
+        /// <returns></returns>
+        public static IServiceCollection AddAzureTopicProducer(this IServiceCollection collection,
             IConfigurationSection configuration)
         {
             var config = configuration.Get<AzureTopicConfiguration>();
@@ -19,9 +28,11 @@ namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
 
             collection.AddCommon();
             collection
-                .AddScoped<IAzureTopicConfiguration>(x => configuration.Get<AzureTopicConfiguration>())
+                .AddScoped<IAzureTopicConfiguration>(_ => configuration.Get<AzureTopicConfiguration>())
                 .AddScoped<IAzureTopicClientFactory, AzureTopicClientFactory>()
                 .AddScoped<ITopicProducer, AzureTopicProducer>();
+
+            return collection;
         }
     }
 }

@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SqlBrokerToAzureAdapter.Adapter;
+using SqlBrokerToAzureAdapter.Consumers;
 using SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues;
+using SqlBrokerToAzureAdapter.Producers.AzureTopics;
 using SqlBrokerToAzureAdapter.Producers.Common;
+using SqlBrokerToAzureAdapter.Producers.MassTransit;
 using SqlBrokerToAzureAdapter.Setup;
 using SqlBrokerToAzureAdapter.Setup.Consumers.SqlBrokerQueues;
 
@@ -53,8 +58,8 @@ namespace SqlBrokerToAzureAdapter
             var brokerMessageHandlers = serviceProvider.GetRequiredService<ISqlBrokerMessageHandlerCollection>();
             brokerMessageHandlers.AddSqlBrokerMessageHandlers(serviceProvider);
 
-            var topicRegistrations = serviceProvider.GetRequiredService<ITopicRegistry>();
-            topicRegistrations.AddTopicRegistrations();
+            //var topicRegistrations = serviceProvider.GetRequiredService<ITopicRegistry>();
+            //topicRegistrations.AddTopicRegistrations();
 
             return serviceProvider;
         }
@@ -62,12 +67,19 @@ namespace SqlBrokerToAzureAdapter
         internal static IServiceCollection ConfigureHostServices(IServiceCollection serviceCollection, IConfigurationRoot config)
         {
             var loggerFactory = CreateLoggerFactory(config);
+            var sqlBrokerQueueConfigurationSection = config.GetSection("Execution:SqlBrokerQueueConsumer");
+            var azureTopicConfigurationSection = config.GetSection("Execution:AzureTopicProducer");
+            var sqlBrokerToAzureAdapterSection = config.GetSection("Execution:SqlBrokerToAzureAdapter");
 
             return serviceCollection
                 .AddLogging()
                 .AddSingleton(x => loggerFactory)
                 .AddSqlBrokerToAzureAdapterSetup(config)
                 .AddSqlBrokerToAzureAdapter(config)
+                .AddSqlBrokerQueueConsumer(sqlBrokerQueueConfigurationSection)
+                //.AddAzureTopicProducer(azureTopicConfigurationSection)
+                .AddRabbitMqTopicProducer()
+                .AddAdapter(sqlBrokerToAzureAdapterSection)
                 .AddTransformations();
         }
 
