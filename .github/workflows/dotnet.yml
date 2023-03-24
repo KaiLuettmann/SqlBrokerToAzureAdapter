@@ -26,12 +26,15 @@ jobs:
     - name: Cache SonarCloud packages
       uses: actions/cache@v1
       with:
-        path: ~\sonar\cache
+        path: ~/sonar/cache
         key: ${{ runner.os }}-sonar
         restore-keys: ${{ runner.os }}-sonar
     - name: Install SonarCloud scanners
       run: |
         dotnet tool install --global dotnet-sonarscanner
+    - name: Install dotnet coverage
+      run: |
+        dotnet tool install --global dotnet-coverage
     - name: Restore dependencies
       run: dotnet restore
     - name: Begin Sonar scan
@@ -39,11 +42,11 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
-        dotnet-sonarscanner begin /k:"KaiLuettmann_SqlBrokerToAzureAdapter" /o:"kailuettmann" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+        dotnet-sonarscanner begin /k:"KaiLuettmann_SqlBrokerToAzureAdapter" /o:"kailuettmann" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet-coverage collect dotnet test --no-build --verbosity normal -f xml -o coverage.xml
     - name: End Sonar scan
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
