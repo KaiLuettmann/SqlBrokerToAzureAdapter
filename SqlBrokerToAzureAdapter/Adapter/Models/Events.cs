@@ -9,7 +9,7 @@ namespace SqlBrokerToAzureAdapter.Adapter.Models
     /// <summary>
     /// A collection of events which should be published
     /// </summary>
-    public class Events : IEnumerable<Event>
+    public sealed class Events : IEnumerable<Event>
     {
         /// <summary>
         /// Creates a new instance of Events
@@ -45,7 +45,7 @@ namespace SqlBrokerToAzureAdapter.Adapter.Models
 
             if ( payloadTypes.Count() > 1)
             {
-                throw new UnexpectedPayloadTypeException($"Ensure all payloads of the delivered events have the same type of payload.");
+                throw new UnexpectedPayloadTypeException("Ensure all payloads of the delivered events have the same type of payload.");
             }
         }
     }

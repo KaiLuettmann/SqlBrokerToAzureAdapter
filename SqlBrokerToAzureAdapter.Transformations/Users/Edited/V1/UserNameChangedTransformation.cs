@@ -24,10 +24,14 @@ namespace SqlBrokerToAzureAdapter.Users.Edited.V1
         {
             return new Event(
                 value.NewValue.Id.ToString(),
-            new UserNameChangedContract(
-                value.NewValue.Id,
-                new UserNameInfoContract(value.NewValue.Firstname, value.NewValue.Lastname, value.NewValue.NickName)
-                )
+                new UserNameChangedContract{
+                    Id = value.NewValue.Id,
+                    NameInfo = new UserNameInfoContract{
+                        Firstname = value.NewValue.Firstname,
+                        Lastname = value.NewValue.Lastname,
+                        Nickname = value.NewValue.NickName
+                    }
+                }
             );
         }
     }

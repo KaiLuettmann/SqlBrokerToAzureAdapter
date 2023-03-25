@@ -333,7 +333,6 @@ namespace SqlBrokerToAzureAdapter.Test.Adapter
             }
         }
 
-
         [Fact]
         public void ReceiveUpdatedAsync_WithNullValues_ShouldThrow()
         {
@@ -426,7 +425,6 @@ namespace SqlBrokerToAzureAdapter.Test.Adapter
                     Times.Never);
             }
         }
-
 
         [Theory]
         [InlineData(1, 1, 1)]

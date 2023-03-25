@@ -196,7 +196,6 @@ namespace SqlBrokerToAzureAdapter.Test.Transformations
             result.UpdatedPair.OldValue.Property1.Should().Be(result.UpdatedPair.NewValue.Property1);
         }
 
-
         [Fact]
         public void Compare_WithTwoUpdatedPairsWhereOneObjectIsEqual_DifferenceShouldHaveCountOfOne()
         {
@@ -251,7 +250,6 @@ namespace SqlBrokerToAzureAdapter.Test.Transformations
                 var builder = new Fixture();
                 //ensure number are unique
                 builder.Customizations.Add(new RandomNumericSequenceGenerator(240, byte.MaxValue, int.MaxValue));
-
 
                 var oldValue = builder.Create<FakeObject<TFakeObjectPropertyType>>();
 

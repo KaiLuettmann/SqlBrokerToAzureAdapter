@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -23,7 +22,7 @@ namespace SqlBrokerToAzureAdapter.Transformations.Tests.Users.SqlBrokerMessageCo
         public void Deserialize_ShouldHaveNoEmptyProperties()
         {
             //Arrange
-            var sqlBrokerMessageBodyJson = File.ReadAllText($"Users/SqlBrokerMessageContracts/UserContract.complete.json");
+            var sqlBrokerMessageBodyJson = File.ReadAllText("Users/SqlBrokerMessageContracts/UserContract.complete.json");
 
             //Act
             var sqlBrokerMessageContracts = _fixture.Deserialize(sqlBrokerMessageBodyJson).ToList();
@@ -42,7 +41,7 @@ namespace SqlBrokerToAzureAdapter.Transformations.Tests.Users.SqlBrokerMessageCo
         public void Deserialize_ShouldHaveNoPropertyWithDefaultValue()
         {
             //Arrange
-            var sqlBrokerMessageBodyJson = File.ReadAllText($"Users/SqlBrokerMessageContracts/UserContract.complete.json");
+            var sqlBrokerMessageBodyJson = File.ReadAllText("Users/SqlBrokerMessageContracts/UserContract.complete.json");
 
             //Act
             var sqlBrokerMessageContracts = _fixture.Deserialize(sqlBrokerMessageBodyJson).ToList();
@@ -61,7 +60,7 @@ namespace SqlBrokerToAzureAdapter.Transformations.Tests.Users.SqlBrokerMessageCo
         public void Deserialize_ShouldHaveNoNullProperties()
         {
             //Arrange
-            var sqlBrokerMessageBodyJson = File.ReadAllText($"Users/SqlBrokerMessageContracts/UserContract.complete.json");
+            var sqlBrokerMessageBodyJson = File.ReadAllText("Users/SqlBrokerMessageContracts/UserContract.complete.json");
 
             //Act
             var sqlBrokerMessageContracts = _fixture.Deserialize(sqlBrokerMessageBodyJson).ToList();

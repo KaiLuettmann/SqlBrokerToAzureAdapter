@@ -17,8 +17,8 @@ namespace SqlBrokerToAzureAdapter.Setup.Consumers.SqlBrokerQueues
         internal static IServiceCollection AddSqlBrokerQueueInstallation(this IServiceCollection collection,
             IConfigurationRoot configurationRoot)
         {
-            collection.AddScoped<ISqlServerInstallationConnectionConfiguration>(x => configurationRoot.GetSection("Setup:SqlBrokerQueueConsumer:Connection").Get<SqlServerInstallationConnectionConfiguration>());
-            collection.AddScoped<ISqlBrokerQueueGenerationConfiguration>(x => configurationRoot.GetSection("Setup:SqlBrokerQueueConsumer:Generation").Get<SqlBrokerQueueGenerationConfiguration>());
+            collection.AddScoped<ISqlServerInstallationConnectionConfiguration>(_ => configurationRoot.GetSection("Setup:SqlBrokerQueueConsumer:Connection").Get<SqlServerInstallationConnectionConfiguration>());
+            collection.AddScoped<ISqlBrokerQueueGenerationConfiguration>(_ => configurationRoot.GetSection("Setup:SqlBrokerQueueConsumer:Generation").Get<SqlBrokerQueueGenerationConfiguration>());
             collection.AddScoped<ISqlBrokerQueueInstallation, SqlBrokerQueueInstallation>();
             collection.AddScoped<ISqlBrokerQueueSetupRepository, SqlBrokerQueueSetupRepository>();
             collection.AddScoped<ISqlBrokerQueueSqlScriptGenerator, SqlBrokerQueueSqlScriptGenerator>();

@@ -9,7 +9,6 @@ namespace SqlBrokerToAzureAdapter.Producers.Common.Exceptions
     {
         internal UnexpectedPayloadTypeException(string message) : base(message)
         {
-
         }
 
         internal UnexpectedPayloadTypeException() : base()

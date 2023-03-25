@@ -73,7 +73,7 @@ namespace SqlBrokerToAzureAdapter
 
             return serviceCollection
                 .AddLogging()
-                .AddSingleton(x => loggerFactory)
+                .AddSingleton(_ => loggerFactory)
                 .AddSqlBrokerToAzureAdapterSetup(config)
                 .AddSqlBrokerToAzureAdapter(config)
                 .AddSqlBrokerQueueConsumer(sqlBrokerQueueConfigurationSection)

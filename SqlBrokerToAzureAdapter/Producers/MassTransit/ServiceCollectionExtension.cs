@@ -25,6 +25,7 @@ namespace SqlBrokerToAzureAdapter.Producers.MassTransit
                         {
                             h.Username("guest");
                             h.Password("guest");
+                            h.ConfigureBatchPublish(x => x.Enabled = true);
                         });
                     });
                 });

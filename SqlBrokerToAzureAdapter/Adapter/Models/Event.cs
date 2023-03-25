@@ -7,7 +7,7 @@ namespace SqlBrokerToAzureAdapter.Adapter.Models
     /// <summary>
     /// The Event which should be published
     /// </summary>
-    public class Event
+    public sealed class Event
     {
         /// <summary>
         /// Creates a new instance of an Event

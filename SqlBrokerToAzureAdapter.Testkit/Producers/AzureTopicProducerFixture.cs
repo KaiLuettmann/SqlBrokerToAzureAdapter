@@ -15,7 +15,7 @@ namespace SqlBrokerToAzureAdapter.Testkit.Producers
             var jsonFileTopicProducer = new JsonFileTopicProducer(publishesJsonFilePath);
             jsonFileTopicProducer.EnsureFileExists();
             jsonFileTopicProducer.ClearFileContent();
-            serviceCollection.AddScoped<ITopicProducer>(x => jsonFileTopicProducer);
+            serviceCollection.AddScoped<ITopicProducer>(_ => jsonFileTopicProducer);
         }
 
         private class JsonFileTopicProducer : ITopicProducer

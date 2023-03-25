@@ -10,10 +10,14 @@ namespace SqlBrokerToAzureAdapter.Users.Added.V1
         {
             return new Event(
                 value.Id.ToString(),
-        new UserAddedContract(
-                    value.Id,
-                    new UserNameInfoContract(value.Firstname, value.Lastname, value.NickName))
-            );
+                new UserAddedContract {
+                    Id = value.Id,
+                    NameInfo = new UserNameInfoContract {
+                        Firstname = value.Firstname,
+                        Lastname = value.Lastname,
+                        Nickname = value.NickName
+                    }
+                });
         }
     }
 }

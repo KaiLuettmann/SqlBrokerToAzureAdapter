@@ -20,8 +20,7 @@ namespace SqlBrokerToAzureAdapter.Test.TestUtilities.AutoFixture
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
 
-            ParameterInfo parameter = request as ParameterInfo;
-            if (parameter == null)
+            if (!(request is ParameterInfo parameter))
             {
                 return new NoSpecimen();
             }

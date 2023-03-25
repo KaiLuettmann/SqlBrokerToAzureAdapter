@@ -10,13 +10,13 @@ namespace SqlBrokerToAzureAdapter.Test.TestModelBuilders
     {
         public ComparedUpdatedPairBuilder<T> WithUpdatedPair(UpdatedPair<T> updatedPair)
         {
-            WithConstructorArgumentFor("updatedPair", updatedPair);
+            WithConstructorArgumentFor(nameof(updatedPair), updatedPair);
             return this;
         }
 
         private ComparedUpdatedPairBuilder<T> WithDifferences(IEnumerable<Difference> differences)
         {
-            WithConstructorArgumentFor("differences", differences);
+            WithConstructorArgumentFor(nameof(differences), differences);
             return this;
         }
 

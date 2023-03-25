@@ -47,7 +47,7 @@ namespace SqlBrokerToAzureAdapter.Testkit.Consumers
                 }
             });
 
-            collection.AddScoped(x => _sqlBrokerQueueRepositoryMock.Object);
+            collection.AddScoped(_ => _sqlBrokerQueueRepositoryMock.Object);
         }
     }
 }

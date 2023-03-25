@@ -82,7 +82,7 @@ namespace SqlBrokerToAzureAdapter.Setup.IntegrationTest.Consumers.SqlBrokerQueue
                 var loggerFactory = CreateLoggerFactory();
                 var serviceCollection = new ServiceCollection()
                     .AddLogging()
-                    .AddSingleton(x => loggerFactory)
+                    .AddSingleton(_ => loggerFactory)
                     .AddSqlBrokerQueueInstallation(GetConfiguration());
 
                 var provider = serviceCollection.BuildServiceProvider();

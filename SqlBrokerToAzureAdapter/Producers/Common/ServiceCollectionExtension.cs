@@ -6,7 +6,7 @@ namespace SqlBrokerToAzureAdapter.Producers.Common
     {
         internal static void AddCommon(this IServiceCollection collection)
         {
-            collection.AddScoped<ITopicRegistry>(x => new TopicRegistry());
+            collection.AddScoped<ITopicRegistry>(_ => new TopicRegistry());
         }
     }
 }

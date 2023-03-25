@@ -11,15 +11,15 @@ namespace SqlBrokerToAzureAdapter.Users
     {
         public static void AddUsers(this IServiceCollection collection)
         {
-            collection.AddScoped<IAddEventTransformations<UserContract>>(x => new AddEventTransformations<UserContract>
+            collection.AddScoped<IAddEventTransformations<UserContract>>(_ => new AddEventTransformations<UserContract>
             {
                 new UserAddedTransformation()
             });
-            collection.AddScoped<IRemoveEventTransformations<UserContract>>(x => new RemoveEventTransformations<UserContract>
+            collection.AddScoped<IRemoveEventTransformations<UserContract>>(_ => new RemoveEventTransformations<UserContract>
             {
                 new UserRemovedTransformation()
             });
-            collection.AddScoped<IEditEventTransformations<UserContract>>(x => new EditEventTransformations<UserContract>
+            collection.AddScoped<IEditEventTransformations<UserContract>>(_ => new EditEventTransformations<UserContract>
             {
                 new UserNameChangedTransformation(),
                 new UserContactInfoChangedTransformation()
