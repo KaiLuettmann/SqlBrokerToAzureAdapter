@@ -33,8 +33,10 @@ namespace SqlBrokerToAzureAdapter.Producers.Common.Models
             {
                 throw new ArgumentNullException(nameof(payloadType));
             }
-
+            #pragma warning disable S4790
             using var md5 = MD5.Create();
+            #pragma warning restore S4790
+
             var inputBytes = new List<byte>();
             inputBytes.AddRange(correlationId.ToByteArray());
             inputBytes.AddRange(Encoding.ASCII.GetBytes(entityId));
