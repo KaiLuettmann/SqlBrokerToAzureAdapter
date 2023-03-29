@@ -11,8 +11,6 @@ using Newtonsoft.Json;
 using SqlBrokerToAzureAdapter.Adapter;
 using SqlBrokerToAzureAdapter.Adapter.Models;
 using SqlBrokerToAzureAdapter.MessageContracts;
-using SqlBrokerToAzureAdapter.Producers.Common;
-using SqlBrokerToAzureAdapter.Producers.Common.Exceptions;
 using SqlBrokerToAzureAdapter.Producers.Common.Models;
 
 namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
@@ -65,14 +63,6 @@ namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
             }
         }
 
-        private static void EnsureEntityIdIsNotEqualToCorrelationId(Metadata metadata, Event @event)
-        {
-            if (metadata.CorrelationId.ToString() == @event.EntityId)
-            {
-                throw new InvalidEntityIdException($"The entity id '{@event.EntityId}' should not be equal to the correlation id '{metadata.CorrelationId}'.");
-            }
-        }
-
         private IEnumerable<Message> BuildMessages(Metadata metadata, IEnumerable<Event> events)
         {
             return events.Select(@event => BuildMessage(metadata, @event));
@@ -84,8 +74,6 @@ namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
             {
                 throw new ArgumentNullException(nameof(metadata));
             }
-
-            EnsureEntityIdIsNotEqualToCorrelationId(metadata, @event);
 
             var messageId = new MessageId(metadata.CorrelationId, @event.EntityId, @event.PayloadType);
             var messageBody = JsonConvert.SerializeObject(@event.Payload);
