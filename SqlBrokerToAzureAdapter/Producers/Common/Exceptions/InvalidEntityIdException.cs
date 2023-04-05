@@ -9,18 +9,15 @@ namespace SqlBrokerToAzureAdapter.Producers.Common.Exceptions
     [Serializable]
     public class InvalidEntityIdException : Exception
     {
-        /// <inheritdoc/>
-        public InvalidEntityIdException()
+        internal InvalidEntityIdException()
         {
         }
 
-        /// <inheritdoc/>
-        public InvalidEntityIdException(string message) : base(message)
+        internal InvalidEntityIdException(string message) : base(message)
         {
         }
 
-        /// <inheritdoc/>
-        public InvalidEntityIdException(string message, Exception innerException) : base(message, innerException)
+        internal InvalidEntityIdException(string message, Exception innerException) : base(message, innerException)
         {
         }
 
