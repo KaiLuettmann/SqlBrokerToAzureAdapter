@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 
 namespace SqlBrokerToAzureAdapter.Producers.Common.Exceptions
 {
@@ -17,6 +18,12 @@ namespace SqlBrokerToAzureAdapter.Producers.Common.Exceptions
         }
 
         internal InvalidPayloadTypeException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+
+        /// <inheritdoc/>
+        protected InvalidPayloadTypeException(SerializationInfo info, StreamingContext ctxt)
+        : base(info, ctxt)
         {
         }
     }
