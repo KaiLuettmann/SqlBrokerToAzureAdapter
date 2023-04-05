@@ -30,6 +30,48 @@ namespace SqlBrokerToAzureAdapter.Test.Producers.Common.Models
             message1.Should().BeEquivalentTo(message2);
         }
 
+        [Fact]
+        public void Ctor_PayloadTypeIsNull_ShouldThrow()
+        {
+            // Arrange
+            _fixture.SetupCorrelationId();
+            _fixture.SetupEntityId();
+
+            // Act
+            Action act = () => new MessageId(_fixture.CorrelationId, _fixture.EntityId, null);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>().WithMessage("*payloadType*");
+        }
+
+        [Fact]
+        public void Ctor_CorrelationIdIsNull_ShouldThrow()
+        {
+            // Arrange
+            _fixture.SetupEntityId();
+            _fixture.SetupPayloadType();
+
+            // Act
+            Action act = () => new MessageId(null, _fixture.EntityId, _fixture.PayloadType);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>().WithMessage("*correlationId*");
+        }
+
+        [Fact]
+        public void Ctor_EntityIdIsNull_ShouldThrow()
+        {
+            // Arrange
+            _fixture.SetupCorrelationId();
+            _fixture.SetupPayloadType();
+
+            // Act
+            Action act = () => new MessageId(_fixture.CorrelationId, null, _fixture.PayloadType);
+
+            // Assert
+            act.Should().Throw<ArgumentNullException>().WithMessage("*entityId*");
+        }
+
         private sealed class Fixture
         {
             public Guid CorrelationId { get; private set; }

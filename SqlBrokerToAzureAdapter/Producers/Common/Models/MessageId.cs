@@ -9,7 +9,7 @@ namespace SqlBrokerToAzureAdapter.Producers.Common.Models
 {
     internal class MessageId : PrimitiveWrapper<Guid, MessageId>
     {
-        public MessageId(Guid correlationId, string entityId, Type payloadType) : base(CreateMd5(correlationId, entityId, payloadType))
+        public MessageId(CorrelationId correlationId, EntityId entityId, PayloadType payloadType) : base(CreateMd5(correlationId, entityId, payloadType))
         {
             EnsureEntityIdIsNotEqualToCorrelationId(correlationId, entityId);
         }
@@ -27,18 +27,23 @@ namespace SqlBrokerToAzureAdapter.Producers.Common.Models
             return Value.ToString();
         }
 
-        private static Guid CreateMd5(Guid correlationId, string entityId, Type payloadType)
+        private static Guid CreateMd5(CorrelationId correlationId, EntityId entityId, PayloadType payloadType)
         {
-            if (payloadType?.FullName == null)
-            {
+            if(correlationId == null)
+                throw new ArgumentNullException(nameof(correlationId));
+
+            if(entityId == null)
+                throw new ArgumentNullException(nameof(entityId));
+
+            if(payloadType == null)
                 throw new ArgumentNullException(nameof(payloadType));
-            }
+
             #pragma warning disable S4790
             using var md5 = MD5.Create();
             #pragma warning restore S4790
 
             var inputBytes = new List<byte>();
-            inputBytes.AddRange(correlationId.ToByteArray());
+            inputBytes.AddRange(correlationId.Value.ToByteArray());
             inputBytes.AddRange(Encoding.ASCII.GetBytes(entityId));
             inputBytes.AddRange(Encoding.ASCII.GetBytes(payloadType.FullName));
             var hashBytes = md5.ComputeHash(inputBytes.ToArray());
