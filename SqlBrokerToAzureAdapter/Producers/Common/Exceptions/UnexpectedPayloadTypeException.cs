@@ -5,6 +5,7 @@ namespace SqlBrokerToAzureAdapter.Producers.Common.Exceptions
     /// <summary>
     /// Errors caused when the type of payload was not expected.
     /// </summary>
+    [Serializable]
     public class UnexpectedPayloadTypeException : Exception
     {
         internal UnexpectedPayloadTypeException(string message) : base(message)

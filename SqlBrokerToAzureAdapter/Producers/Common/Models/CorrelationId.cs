@@ -7,7 +7,7 @@ namespace SqlBrokerToAzureAdapter.Producers.Common.Models
     {
         public CorrelationId(Guid correlationId) : base(correlationId)
         {
-            if(correlationId == default)
+            if(correlationId == Guid.Empty)
             {
                 throw new ArgumentDefaultException(nameof(correlationId));
             }
@@ -16,10 +16,5 @@ namespace SqlBrokerToAzureAdapter.Producers.Common.Models
         public static implicit operator Guid(CorrelationId correlationId) => correlationId.Value;
 
         public static implicit operator CorrelationId(Guid correlationId) => new CorrelationId(correlationId);
-
-        public override string ToString()
-        {
-            return Value.ToString();
-        }
     }
 }
