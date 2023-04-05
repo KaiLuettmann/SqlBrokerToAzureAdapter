@@ -66,7 +66,6 @@ namespace SqlBrokerToAzureAdapter.Setup.Consumers.SqlBrokerQueues
 
         private async Task InstallTableUpdatedTriggersAsync(CancellationToken cancellationToken)
         {
-
             _logger.LogInformation("Installing update triggers...");
             var tableUpdatedTriggerSqlScripts = await _scriptGenerator.GenerateSetupTableUpdatedTriggerSqlScripts();
             foreach (var tableUpdatedTriggerSqlScript in tableUpdatedTriggerSqlScripts)

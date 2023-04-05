@@ -33,7 +33,7 @@ namespace SqlBrokerToAzureAdapter.Transformations
 
         private ComparedUpdatedPair<T> Compare(UpdatedPair<T> updatedPair)
         {
-            var isEqual = Compare(updatedPair.OldValue, updatedPair.NewValue, out var differences);
+            Compare(updatedPair.OldValue, updatedPair.NewValue, out var differences);
             return new ComparedUpdatedPair<T>(updatedPair, differences);
         }
 

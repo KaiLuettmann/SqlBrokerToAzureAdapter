@@ -2,21 +2,23 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Extensions.Logging;
+using SqlBrokerToAzureAdapter.Producers.Common;
 
 namespace SqlBrokerToAzureAdapter.Producers.AzureTopics
 {
-    internal class TopicClientFactory : ITopicClientFactory
+    internal class AzureTopicClientFactory : IAzureTopicClientFactory
     {
         private readonly ITopicRegistry _topicRegistry;
         private readonly IAzureTopicConfiguration _configuration;
         private readonly Dictionary<string, ITopicClient> _topicClients = new Dictionary<string, ITopicClient>();
-        private readonly ILogger<TopicClientFactory> _logger;
-        public TopicClientFactory(ILogger<TopicClientFactory> logger, IAzureTopicConfiguration configuration, ITopicRegistry topicRegistry)
+        private readonly ILogger<AzureTopicClientFactory> _logger;
+        public AzureTopicClientFactory(ILogger<AzureTopicClientFactory> logger, IAzureTopicConfiguration configuration, ITopicRegistry topicRegistry)
         {
             _topicRegistry = topicRegistry ?? throw new ArgumentNullException(nameof(topicRegistry));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
+
         public ITopicClient Get(Type payloadType)
         {
             if (!_topicRegistry.TryGetValue(payloadType, out var topic))

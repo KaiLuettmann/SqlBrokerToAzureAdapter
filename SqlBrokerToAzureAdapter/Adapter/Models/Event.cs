@@ -1,11 +1,13 @@
 using System;
+using System.Linq;
+using SqlBrokerToAzureAdapter.Extensions;
 
-namespace SqlBrokerToAzureAdapter.Producers.AzureTopics.Models
+namespace SqlBrokerToAzureAdapter.Adapter.Models
 {
     /// <summary>
     /// The Event which should be published
     /// </summary>
-    public class Event
+    public sealed class Event
     {
         /// <summary>
         /// Creates a new instance of an Event
@@ -32,5 +34,7 @@ namespace SqlBrokerToAzureAdapter.Producers.AzureTopics.Models
         /// The payload of the event
         /// </summary>
         public object Payload { get;  }
+
+        internal Type PayloadType => Payload.GetType();
     }
 }

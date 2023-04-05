@@ -1,19 +1,25 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SqlBrokerToAzureAdapter.Consumers;
-using SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues;
-using SqlBrokerToAzureAdapter.Producers;
-using SqlBrokerToAzureAdapter.Transformations;
 
 namespace SqlBrokerToAzureAdapter.Adapter
 {
-    internal static class ServiceCollectionExtension
+    /// <summary>
+    /// Extensions for the <see cref="IServiceCollection"/> to add adapter
+    /// </summary>
+    public static class ServiceCollectionExtension
     {
-        internal static void AddAdapter(this IServiceCollection collection,
+        /// <summary>
+        /// Adds the adapter
+        /// </summary>
+        /// <param name="collection">the service collection</param>
+        /// <param name="configuration">The configuration</param>
+        public static IServiceCollection AddAdapter(this IServiceCollection collection,
             IConfigurationSection configuration)
         {
             var config = configuration.Get<SqlBrokerToAzureAdapterConfiguration>() ?? new SqlBrokerToAzureAdapterConfiguration();
-            collection.AddScoped<ISqlBrokerToAzureAdapterConfiguration>(x => config);
+            collection.AddScoped<ISqlBrokerToAzureAdapterConfiguration>(_ => config);
+
+            return collection;
         }
     }
 }

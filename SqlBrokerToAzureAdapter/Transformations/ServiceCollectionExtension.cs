@@ -1,6 +1,4 @@
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues;
 
 namespace SqlBrokerToAzureAdapter.Transformations
 {

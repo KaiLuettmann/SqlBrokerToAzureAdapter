@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -9,10 +10,12 @@ using FluentAssertions.Execution;
 using Microsoft.Azure.ServiceBus;
 using Microsoft.Extensions.Logging;
 using Moq;
+using SqlBrokerToAzureAdapter.Adapter.Models;
 using SqlBrokerToAzureAdapter.MessageContracts;
 using SqlBrokerToAzureAdapter.Producers.AzureTopics;
-using SqlBrokerToAzureAdapter.Producers.AzureTopics.Exceptions;
-using SqlBrokerToAzureAdapter.Producers.AzureTopics.Models;
+using SqlBrokerToAzureAdapter.Producers.Common;
+using SqlBrokerToAzureAdapter.Producers.Common.Exceptions;
+using SqlBrokerToAzureAdapter.Producers.Common.Models;
 using SqlBrokerToAzureAdapter.Test.TestModelBuilders;
 using Xunit;
 using Xunit.Abstractions;
@@ -130,9 +133,9 @@ namespace SqlBrokerToAzureAdapter.Test.Producers.AzureTopics
                 _fixture.SendMessages.Should().HaveCount(1);
                 var sendMessage = _fixture.SendMessages.Single();
 
-                sendMessage.MessageId.Should().Contain(nameof(FakePayload));
-                sendMessage.MessageId.Should().Contain(_fixture.Metadata.CorrelationId.ToString());
-                sendMessage.MessageId.Should().Contain(_fixture.Events.Single().EntityId);
+                var @event = _fixture.Events.Single();
+                sendMessage.MessageId.Should().BeEquivalentTo(new MessageId(_fixture.Metadata.CorrelationId,
+                    @event.EntityId, @event.PayloadType).ToString());
             }
         }
 
@@ -158,7 +161,7 @@ namespace SqlBrokerToAzureAdapter.Test.Producers.AzureTopics
         }
 
         [Fact]
-        public async Task Publish_Successfully_MessageShouldHaveContentType()
+        public async Task Publish_Successfully_MessageShouldHaveContentTypeWithValueApplicationJson()
         {
             //Arrange
             _fixture.SetupEventsWithCount(1);
@@ -174,7 +177,7 @@ namespace SqlBrokerToAzureAdapter.Test.Producers.AzureTopics
                 _fixture.SendMessages.Should().HaveCount(1);
                 var sendMessage = _fixture.SendMessages.Single();
 
-                sendMessage.ContentType.Should().Be(typeof(FakePayload).FullName);
+                sendMessage.ContentType.Should().Be(MediaTypeNames.Application.Json);
             }
         }
 
@@ -219,24 +222,6 @@ namespace SqlBrokerToAzureAdapter.Test.Producers.AzureTopics
         }
 
         [Fact]
-        public void Publish_TwoEventsWithDifferentPayloadType_ShouldThrow()
-        {
-            //Arrange
-            _fixture.SetupTwoEventsWithDifferentPayloadType();
-            _fixture.SetupTopicClientSuccessfully();
-            var testObject = _fixture.CreateTestObject();
-
-            //Act
-            Func<Task> act = async () => await testObject.PublishAsync(_fixture.Metadata, _fixture.Events);
-
-            //Assert
-            using (new AssertionScope())
-            {
-                act.Should().Throw<UnexpectedPayloadTypeException>();
-            }
-        }
-
-        [Fact]
         public async Task Publish_WithoutEvents_TopicClientShouldNotSend()
         {
             //Arrange
@@ -255,7 +240,7 @@ namespace SqlBrokerToAzureAdapter.Test.Producers.AzureTopics
         }
 
         [Fact]
-        public async Task Publish_Successfully_MessageShouldHaveLabelWithTopic()
+        public async Task Publish_Successfully_MessageShouldHaveLabelWithPayloadTypeFullname()
         {
             //Arrange
             _fixture.SetupEventsWithCount(1);
@@ -271,7 +256,7 @@ namespace SqlBrokerToAzureAdapter.Test.Producers.AzureTopics
                 _fixture.SendMessages.Should().HaveCount(1);
                 var sendMessage = _fixture.SendMessages.Single();
 
-                sendMessage.Label.Should().Be(_fixture.Topic);
+                sendMessage.Label.Should().Be(_fixture.Events.Single().PayloadType.FullName);
             }
         }
 
@@ -301,8 +286,7 @@ namespace SqlBrokerToAzureAdapter.Test.Producers.AzureTopics
 
         private class Fixture
         {
-            private readonly Mock<ITopicClientFactory> _topicClientFactory;
-            private readonly Mock<ITopicRegistry> _topicRegistrationMock;
+            private readonly Mock<IAzureTopicClientFactory> _topicClientFactory;
             private readonly ILogger<AzureTopicProducer> _logger;
             public FakePayload SourcePayload { get; } = new FakePayload {FakeProperty = "FakeProperty"};
             public string Topic { get; } = "FakeTopic";
@@ -312,16 +296,15 @@ namespace SqlBrokerToAzureAdapter.Test.Producers.AzureTopics
 
             public Fixture(ILogger<AzureTopicProducer> logger)
             {
-                _topicClientFactory = new Mock<ITopicClientFactory>();
+                _topicClientFactory = new Mock<IAzureTopicClientFactory>();
                 TopicClient = new Mock<ITopicClient>();
-                _topicRegistrationMock = new Mock<ITopicRegistry>();
                 _logger = logger;
 
                 _topicClientFactory.Setup(x => x.Get(It.IsAny<Type>())).Returns(TopicClient.Object);
             }
 
             public Metadata Metadata { get; private set; }
-            public IList<Event> Events { get; private set; }
+            public Events Events { get; private set; }
 
             public int OccuredMessageSizeExceededExceptions { get; private set; }
 
@@ -329,7 +312,6 @@ namespace SqlBrokerToAzureAdapter.Test.Producers.AzureTopics
             {
                 return new AzureTopicProducer(
                     _logger,
-                    _topicRegistrationMock.Object,
                     _topicClientFactory.Object
                 );
             }
@@ -344,28 +326,18 @@ namespace SqlBrokerToAzureAdapter.Test.Producers.AzureTopics
             public void SetupEventsWithCount(int count)
             {
                 Metadata = new Metadata(Guid.NewGuid(), DateTime.UtcNow);
-                Events = new EventBuilder()
+                Events = new Events(new EventBuilder()
                     .WithPayload(SourcePayload)
-                    .CreateMany(count).ToList();
+                    .CreateMany(count));
             }
 
             public void SetupEventsWhereEntityIdIEqualToCorrelationIdWithCount(int count)
             {
                 Metadata = new Metadata(Guid.NewGuid(), DateTime.UtcNow);
-                Events = new EventBuilder()
+                Events = new Events(new EventBuilder()
                     .WithEntityId(Metadata.CorrelationId.ToString())
                     .WithPayload(SourcePayload)
-                    .CreateMany(count).ToList();
-            }
-
-            public void SetupTwoEventsWithDifferentPayloadType()
-            {
-                Metadata = new Metadata(Guid.NewGuid(), DateTime.UtcNow);
-                Events = new List<Event>
-                {
-                    new EventBuilder().WithPayload(SourcePayload).Create(),
-                    new EventBuilder().WithPayload(new AnotherFakePayload()).Create()
-                };
+                    .CreateMany(count));
             }
 
             public void SetupTopicClientFailsWithTooBigPayload()
@@ -376,9 +348,6 @@ namespace SqlBrokerToAzureAdapter.Test.Producers.AzureTopics
 
             public void SetupTopicClientSuccessfully()
             {
-                _topicRegistrationMock.SetupGet(x => x[typeof(FakePayload)])
-                    .Returns(Topic);
-
                 TopicClient.Setup(x => x.SendAsync(It.IsAny<IList<Message>>()))
                     .Callback<IList<Message>>(messages => SendMessages.AddRange(messages));
             }

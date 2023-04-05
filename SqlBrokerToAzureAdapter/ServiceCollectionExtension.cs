@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using SqlBrokerToAzureAdapter.Adapter;
 using SqlBrokerToAzureAdapter.Consumers;
 using SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues;
-using SqlBrokerToAzureAdapter.Producers;
 using SqlBrokerToAzureAdapter.Producers.AzureTopics;
 using SqlBrokerToAzureAdapter.Transformations;
 
@@ -28,8 +27,8 @@ namespace SqlBrokerToAzureAdapter
             var sqlBrokerQueueConfigurationSection = configurationRoot.GetSection("Execution:SqlBrokerQueueConsumer");
             collection.AddSqlBrokerQueueConsumer(sqlBrokerQueueConfigurationSection);
 
-            var azureQueueConfigurationSection = configurationRoot.GetSection("Execution:AzureTopicProducer");
-            collection.AddAzureQueueProducer(azureQueueConfigurationSection);
+            var azureTopicConfigurationSection = configurationRoot.GetSection("Execution:AzureTopicProducer");
+            collection.AddAzureTopicProducer(azureTopicConfigurationSection);
 
             var sqlBrokerToAzureAdapterSection = configurationRoot.GetSection("Execution:SqlBrokerToAzureAdapter");
             collection.AddAdapter(sqlBrokerToAzureAdapterSection);

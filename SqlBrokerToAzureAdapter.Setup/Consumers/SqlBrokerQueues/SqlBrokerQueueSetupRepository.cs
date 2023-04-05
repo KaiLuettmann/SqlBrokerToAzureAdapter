@@ -36,7 +36,6 @@ namespace SqlBrokerToAzureAdapter.Setup.Consumers.SqlBrokerQueues
             _sqlConnection = null;
         }
 
-
         public async Task ExecuteSqlScriptAsync(string sqlScript)
         {
             await using var command = new SqlCommand(sqlScript, _sqlConnection, _transaction);

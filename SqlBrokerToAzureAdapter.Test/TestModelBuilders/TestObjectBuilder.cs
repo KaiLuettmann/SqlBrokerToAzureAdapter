@@ -43,7 +43,7 @@ namespace SqlBrokerToAzureAdapter.Test.TestModelBuilders
         {
             AddTransformation(c => c.With(propertyPicker, value));
         }
-        
+
         private void AddTransformation(Func<IPostprocessComposer<T>, IPostprocessComposer<T>> transformation)
         {
             _transformations.Add(transformation);

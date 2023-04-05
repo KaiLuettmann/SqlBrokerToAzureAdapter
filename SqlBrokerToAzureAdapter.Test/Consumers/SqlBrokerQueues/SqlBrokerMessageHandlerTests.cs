@@ -131,7 +131,7 @@ namespace SqlBrokerToAzureAdapter.Test.Consumers.SqlBrokerQueues
 
             private void SetupBrokerMessageTypeName()
             {
-                _brokerMessageTypeName = $"{nameof(FakeDataBaseContract)}_{_sqlBrokerMessageType.ToString()}";
+                _brokerMessageTypeName = $"{nameof(FakeDataBaseContract)}_{_sqlBrokerMessageType}";
             }
 
             public void SetupHandler(SqlBrokerMessageType sqlBrokerMessageType)
@@ -183,8 +183,6 @@ namespace SqlBrokerToAzureAdapter.Test.Consumers.SqlBrokerQueues
                 SetupBrokerMessage();
                 DeserializedUpdatedValues = new Fixture().CreateMany<UpdatedPair<T>>(count);
             }
-
-
 
             public void VerifyReceiveInserted(Times times)
             {

@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using SqlBrokerToAzureAdapter.Adapter;
+using SqlBrokerToAzureAdapter.Adapter.Models;
 using SqlBrokerToAzureAdapter.MessageContracts;
-using SqlBrokerToAzureAdapter.Producers.AzureTopics;
-using SqlBrokerToAzureAdapter.Producers.AzureTopics.Models;
 
 namespace SqlBrokerToAzureAdapter.Testkit.Producers
 {
@@ -16,10 +15,10 @@ namespace SqlBrokerToAzureAdapter.Testkit.Producers
             var jsonFileTopicProducer = new JsonFileTopicProducer(publishesJsonFilePath);
             jsonFileTopicProducer.EnsureFileExists();
             jsonFileTopicProducer.ClearFileContent();
-            serviceCollection.AddScoped<IAzureTopicProducer>(x => jsonFileTopicProducer);
+            serviceCollection.AddScoped<ITopicProducer>(_ => jsonFileTopicProducer);
         }
 
-        private class JsonFileTopicProducer : IAzureTopicProducer
+        private class JsonFileTopicProducer : ITopicProducer
         {
             private readonly string _filePath;
 
@@ -28,7 +27,7 @@ namespace SqlBrokerToAzureAdapter.Testkit.Producers
                 _filePath = publishesJsonFilePath;
             }
 
-            public Task PublishAsync(Metadata metadata, IList<Event> events)
+            public Task PublishAsync(Metadata metadata, Events events)
             {
                 var json = JsonSerializer.Serialize(events);
 

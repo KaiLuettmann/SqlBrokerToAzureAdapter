@@ -193,7 +193,6 @@ namespace SqlBrokerToAzureAdapter.Test.Consumers.SqlBrokerQueues
 
         private class Fixture
         {
-
             private readonly Mock<ISqlBrokerMessageHandler> _brokerMessageHandlerMock;
             private readonly Mock<ISqlBrokerQueueConfiguration> _sqlBrokerQueueConfigurationMock;
             private readonly Mock<ISqlBrokerQueueRepository> _repositoryMock;

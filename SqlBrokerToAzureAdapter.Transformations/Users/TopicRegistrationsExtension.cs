@@ -1,4 +1,4 @@
-using SqlBrokerToAzureAdapter.Producers.AzureTopics;
+using SqlBrokerToAzureAdapter.Producers.Common;
 using SqlBrokerToAzureAdapter.Users.Added.V1;
 using SqlBrokerToAzureAdapter.Users.Edited.V1;
 using SqlBrokerToAzureAdapter.Users.Removed.V1;

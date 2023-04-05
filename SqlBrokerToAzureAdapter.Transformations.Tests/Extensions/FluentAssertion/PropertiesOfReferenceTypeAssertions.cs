@@ -70,9 +70,7 @@ namespace SqlBrokerToAzureAdapter.Transformations.Tests.Extensions.FluentAsserti
                     continue;
                 }
 
-                var enumerable = property.GetValue(Subject) as IEnumerable;
-
-                if (enumerable == null)
+                if (!(property.GetValue(Subject) is IEnumerable enumerable))
                 {
                     continue;
                 }
@@ -88,7 +86,7 @@ namespace SqlBrokerToAzureAdapter.Transformations.Tests.Extensions.FluentAsserti
 
         private static bool IsEmpty(IEnumerable source)
         {
-            foreach (var item in source)
+            foreach (var _ in source)
             {
                 return false;
             }

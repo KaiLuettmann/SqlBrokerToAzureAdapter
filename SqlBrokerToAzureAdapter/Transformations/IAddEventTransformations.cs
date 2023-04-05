@@ -8,6 +8,5 @@ namespace SqlBrokerToAzureAdapter.Transformations
     /// <typeparam name="T">The type of the message body.</typeparam>
     public interface IAddEventTransformations<in T> : IEnumerable<IAddEventTransformation<T>>
     {
-
     }
 }

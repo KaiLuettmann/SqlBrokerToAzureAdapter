@@ -1,4 +1,4 @@
-using SqlBrokerToAzureAdapter.Producers.AzureTopics.Models;
+using SqlBrokerToAzureAdapter.Adapter.Models;
 using SqlBrokerToAzureAdapter.Transformations;
 using SqlBrokerToAzureAdapter.Users.SqlBrokerMessageContracts;
 
@@ -10,9 +10,9 @@ namespace SqlBrokerToAzureAdapter.Users.Removed.V1
         {
             return new Event(
                 value.Id.ToString(),
-            new UserRemovedContract(
-                value.Id
-                )
+                new UserRemovedContract{
+                    Id = value.Id
+                }
             );
         }
     }

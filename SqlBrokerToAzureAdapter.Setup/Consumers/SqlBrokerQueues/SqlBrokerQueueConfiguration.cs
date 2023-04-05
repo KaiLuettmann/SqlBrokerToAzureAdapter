@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace SqlBrokerToAzureAdapter.Setup.Consumers.SqlBrokerQueues
 {
     /// <summary>

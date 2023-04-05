@@ -5,9 +5,18 @@ using SqlBrokerToAzureAdapter.Consumers.SqlBrokerQueues;
 
 namespace SqlBrokerToAzureAdapter.Consumers
 {
-    internal static class ServiceCollectionExtension
+    /// <summary>
+    /// Extensions for the <see cref="IServiceCollection"/> to add consumer
+    /// </summary>
+    public static class ServiceCollectionExtension
     {
-        internal static void AddSqlBrokerQueueConsumer(this IServiceCollection collection,
+        /// <summary>
+        /// Adds sql broker consumer
+        /// </summary>
+        /// <param name="collection">the service collection</param>
+        /// <param name="configuration">The configuration</param>
+        /// <returns></returns>
+        public static IServiceCollection AddSqlBrokerQueueConsumer(this IServiceCollection collection,
             IConfigurationSection configuration)
         {
             var config = configuration.Get<SqlBrokerQueueConfiguration>();
@@ -16,10 +25,12 @@ namespace SqlBrokerToAzureAdapter.Consumers
                 throw new ConfigurationErrorsException("Could not load the configuration for the 'SqlBrokerQueue'. Did you forget to create an appsettings.json file?");
             }
             collection
-                .AddScoped<ISqlBrokerMessageHandlerCollection>(x => new SqlBrokerMessageHandlerCollection())
-                .AddScoped<ISqlBrokerQueueConfiguration>(x => config)
+                .AddScoped<ISqlBrokerMessageHandlerCollection>(_ => new SqlBrokerMessageHandlerCollection())
+                .AddScoped<ISqlBrokerQueueConfiguration>(_ => config)
                 .AddScoped<ISqlBrokerQueueRepository, SqlBrokerQueueRepository>()
                 .AddScoped<ISqlBrokerQueueConsumer, SqlBrokerQueueConsumer>();
+
+            return collection;
         }
     }
 }
