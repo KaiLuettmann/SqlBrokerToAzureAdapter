@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.Serialization;
 
 namespace SqlBrokerToAzureAdapter.Producers.Common.Exceptions
 {
@@ -8,15 +9,18 @@ namespace SqlBrokerToAzureAdapter.Producers.Common.Exceptions
     [Serializable]
     public class InvalidEntityIdException : Exception
     {
-        internal InvalidEntityIdException() : base()
+        /// <inheritdoc/>
+        public InvalidEntityIdException() : base()
         {
         }
 
-        internal InvalidEntityIdException(string message) : base(message)
+        /// <inheritdoc/>
+        public InvalidEntityIdException(string message) : base(message)
         {
         }
 
-        internal InvalidEntityIdException(string message, Exception innerException) : base(message, innerException)
+        /// <inheritdoc/>
+        public InvalidEntityIdException(string message, Exception innerException) : base(message, innerException)
         {
         }
     }
